@@ -1,0 +1,96 @@
+# Amazon EC2 e EBS — Entendendo Infraestrutura como Serviço (IaaS)
+
+## O que é o Amazon EC2
+
+O **Amazon EC2 (Elastic Compute Cloud)** é um **servidor virtual** na nuvem da AWS. Ele permite criar e gerenciar máquinas virtuais (instâncias) para rodar aplicações, sites ou sistemas — sem precisar de hardware físico.
+-É um dos principais serviços de **IaaS (Infraestrutura como Serviço)** da AWS, pois oferece flexibilidade e escalabilidade sob demanda.
+
+---
+
+## O que é EBS (Elastic Block Store)
+
+O **Amazon EBS** fornece **armazenamento em blocos** para as instâncias EC2.
+Pensa como se fosse o “HD” da tua máquina virtual. Ele guarda os dados de forma persistente — ou seja, mesmo que a instância desligue, os dados continuam lá.
+
+---
+
+## AMI — Amazon Machine Image
+
+A **AMI (Amazon Machine Image)** é uma **imagem pré-configurada** usada para criar instâncias EC2.
+Ela define o sistema operacional, as configurações e os softwares que estarão instalados na nova instância.
+
+### Criação e uso
+
+* Você pode criar sua própria AMI a partir de uma instância existente (tipo “tirar uma foto” da configuração atual).
+* Pode usar AMIs públicas da AWS (Ubuntu, Amazon Linux, Windows, etc.) ou privadas, feitas por você.
+
+### Tipos de AMI
+
+* **AMI pública:** disponível para todos os usuários AWS.
+* **AMI privada:** criada e usada dentro da sua conta.
+* **AMI do marketplace:** criada por terceiros (com configurações específicas).
+
+### Escolha da AMI
+
+A escolha depende da aplicação:
+
+* Aplicação web → Amazon Linux / Ubuntu
+* Aplicação corporativa → Windows Server
+* Machine Learning → Deep Learning AMI (com GPU)
+
+### Launch de instâncias EC2
+
+Depois de escolher uma AMI, você faz o **launch** — que é o processo de iniciar uma **instância EC2** baseada nela.
+Basicamente, é criar uma “nova máquina virtual” usando a imagem como base.
+
+---
+
+## Snapshots do EBS
+
+Um **snapshot** é uma **cópia de segurança (backup)** de um volume EBS.
+Ele guarda o estado completo do disco no momento da captura.
+
+### Como fazer
+
+1. No console AWS → EC2 → Volumes → Criar Snapshot.
+2. O snapshot é armazenado no **Amazon S3** automaticamente (de forma gerenciada pela AWS).
+3. Pode ser exportado ou usado para criar novos volumes.
+
+### Recuperação em caso de desastre
+
+Em caso de falha, basta restaurar o snapshot e recriar o volume EBS.
+Isso garante **resiliência** e **continuidade** da infraestrutura.
+
+---
+
+## Custos e Regiões
+
+Os **custos de snapshots** variam conforme a **região da AWS**:
+
+* **US East (N. Virginia)** → geralmente a mais barata.
+* **EU (Londres)** → custo um pouco mais alto.
+
+Os preços são cobrados por **GB armazenado por mês**, e também variam se você exportar o snapshot para outra região.
+
+---
+
+## Arquitetura básica (EC2 + EBS + Lambda + S3)
+
+Fluxo comum:
+
+1. **Lambda** automatiza eventos (ex: criar snapshots diários).
+2. **EC2** roda a aplicação.
+3. **EBS** armazena os dados.
+4. **S3** guarda os snapshots para backup ou exportação.
+
+![Arquitetura AWS EC2 + EBS + Lambda + S3](A_technical_diagram_in_this_image_illustrates_Amaz.png)
+
+---
+
+## Resumo final
+
+> EC2 é o servidor virtual.
+> EBS é o disco dele.
+> AMI é o modelo usado pra criar novas instâncias.
+> Snapshot é a cópia de segurança do disco.
+> Tudo isso faz parte da infraestrutura como serviço (IaaS) — onde você controla os recursos, e a AWS cuida do resto.
